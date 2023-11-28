@@ -1,1 +1,11 @@
 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true # this is used for this microservice is register with eureka server
+    register-with-eureka: true
+    #below service URL is used to register this service to eureka server
+    # to register this microservice to below server and her we are providing server url
+    service-url:
+      defaultZone: http://localhost:8761/eureka
