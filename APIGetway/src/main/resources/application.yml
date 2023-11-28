@@ -1,0 +1,33 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: API-GETWAY
+  cloud:
+    gateway:
+      routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE # we are using service registry wo loadbalancer we are using and load balancer internally calling all the registered microservices with there name like USER-SERVICES, HOTEL-SERVICES.... so on
+          predicates:   # provide matching after the base url USER-SERVICE/users/**    star means anything after this url
+            - Path=/users/**
+
+        - id: HOTEL-SERVICE
+          uri: lb://HOTEL-SERVICE # we are using service registry wo loadbalancer we are using and load balancer internally calling all the registered microservices with there name like USER-SERVICES, HOTEL-SERVICES.... so on
+          predicates: # provide matching after the base url USER-SERVICE/users/**    star means anything after this url
+            - Path=/hotels/**,/staffs/**   # you can add multiple urls using , separator for all urls use /**
+
+        - id: RATING-SERVICE
+          uri: lb://RATING-SERVICE # we are using service registry wo loadbalancer we are using and load balancer internally calling all the registered microservices with there name like USER-SERVICES, HOTEL-SERVICES.... so on
+          predicates: # provide matching after the base url USER-SERVICE/users/**    star means anything after this url
+            - Path=/ratings/**
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true # this is used for this microservice is register with eureka server
+    register-with-eureka: true
+    #below service URL is used to register this service to eureka server
+    # to register this microservice to below server and her we are providing server url
+    service-url:
+      defaultZone: http://localhost:8761/eureka

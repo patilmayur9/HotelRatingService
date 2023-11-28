@@ -1,0 +1,30 @@
+
+#https://github.com/LearnCodeWithDurgesh/Microservices-Tutorial-Series.git   all code are here
+server:
+  port: 8081
+
+Spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/microservices
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  application:
+    name: USER-SERVICE
+#    properties:  # if dialect is not autodetected then set it manually
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true # this is used for this microservice is register with eureka server
+    register-with-eureka: true
+    #below service URL is used to register this service to eureka server
+    # to register this microservice to below server and her we are providing server url
+    service-url:
+      defaultZone: http://localhost:8761/eureka

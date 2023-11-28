@@ -1,0 +1,11 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  renewalPercentThreshold: 0.85 #this property suppress the eureka warnings shows in the UI
+
+server:
+  port: 8761
+
