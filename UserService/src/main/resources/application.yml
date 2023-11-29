@@ -4,6 +4,8 @@ server:
   port: 8081
 
 Spring:
+  application:
+    name: USER-SERVICE
   datasource:
     url: jdbc:mysql://localhost:3306/microservices
     username: root
@@ -13,18 +15,58 @@ Spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  application:
-    name: USER-SERVICE
+  config:
+    import: optional:configserver:http://localhost:8085
+#  profiles:
+#    active: prod  #spring.profiles.active.prod   using this we can change our configuration development to production
+
 #    properties:  # if dialect is not autodetected then set it manually
 #      hibernate:
 #        dialect: org.hibernate.dialect.MySQL8Dialect
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetch-registry: true # this is used for this microservice is register with eureka server
-    register-with-eureka: true
-    #below service URL is used to register this service to eureka server
-    # to register this microservice to below server and her we are providing server url
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+
+
+#eureka:  ## all these properties fetched from config. server so no need to add manually
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetch-registry: true # this is used for this microservice is register with eureka server
+#    register-with-eureka: true
+#    #below service URL is used to register this service to eureka server
+#    # to register this microservice to below server and her we are providing server url
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+
+#reselience4j configuration for circuit breaker (fault tolerance)
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    web:
+    exposure:
+      include: health # if we put here * then actuators all 13 method invoked but here requirement is only for health
+  endpoints:
+    health:
+      show-details: always
+io:
+  github:
+    resilience4j:
+      common:
+        circuitbreaker:
+          configuration:
+            CircuitBreakerConfigurationProperties$InstanceProperties:
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 10
+      FailureRateThreshold: 50
+      minimumNumberOfCalls: 5
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 6s
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowSize: 10
+      slidingWindowType: COUNT_BASED
+
