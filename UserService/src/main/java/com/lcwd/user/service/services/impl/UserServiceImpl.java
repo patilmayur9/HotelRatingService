@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     /*
      RestTemplate is in built class so if we can use it then we need to explicitly tell
      the ioc container to create the bean of that class and inject where  i can used it
-     but for that our custom  calss one of class is must uses the @Configuration so in that class we declare our bean
-     and access here that bean  by default @SpringBootApplication annotation is having @Configuration so we can declare ther also
-      other wise you need to create one config class annoted with @Configuration and in that declare n number of bean and use it
+     but for that our custom class one of class is must annotate with the @Configuration so in that class we declare our bean
+     and access here that bean  by default @SpringBootApplication annotation is having @Configuration so we can declare there also
+      other wise you need to create one config class annotated with @Configuration and in that declare n number of bean and use it
      */
     private RestTemplate restTemplate;
     @Override
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with given id is not found on server !! : "+userId));
         //fetch rating of the above user from   RATING-SERVICE  microservice
         // but RATING-SERVICE  microservice must have one rest controller of api to get the rating using usrId
-        // to call the http api to other microservices  we need one http client for example (rest template, fin client ... etc) here we are using rest template to call RATING-SERVICE  microservice
+        // to call the http api to other microservices  we need one http client for example (rest template, feign client ... etc) here we are using rest template to call RATING-SERVICE  microservice
         // http://localhost:8083/ratings/users/509231f9-88f0-4d97-8e0e-f36d11814493
                                                                     //localhost:8083 => RATING-SERVICE
        Rating [] ratingArray =  restTemplate.getForObject("http://RATING-SERVICE/ratings/users/"+user.getUserId(), Rating[].class);// pass the url and just pass the second parameter what type of response you want here i want this particular user how many hotels rated give me that hotels list
